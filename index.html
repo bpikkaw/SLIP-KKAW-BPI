@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KKAW BPI — Slip Potongan + Simulasi</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -124,7 +124,76 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
 .sim-loading.show{display:block;}
 .sim-spinner{display:inline-block;width:20px;height:20px;border:2px solid #dde3f5;border-top-color:#ff8f00;border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:8px;}
 @media print{body{background:#fff!important;padding:0;}.slip-topbar{display:none!important;}.slip-wrap{display:block!important;max-width:100%;}.slip-card{border-radius:0;box-shadow:none;}.login-wrap{display:none!important;}.simulasi-panel{display:none!important;}}
-@media(max-width:480px){body{padding:10px;}.slip-id{flex-direction:column;text-align:center;}.id-row{justify-content:center;gap:12px;}.id-val{text-align:left;}.topbar-btns{justify-content:flex-start;}.btn-print,.btn-simulasi,.btn-download,.btn-out{padding:6px 10px;font-size:11px;}.hasil-row{flex-direction:column;align-items:flex-start;gap:4px;}}
+@media(max-width:600px){
+  body{padding:8px;}
+  .slip-wrap{max-width:100%;}
+  .login-wrap{max-width:100%;}
+
+  /* topbar */
+  .slip-topbar{flex-direction:column;align-items:flex-start;}
+  .topbar-btns{width:100%;justify-content:flex-start;flex-wrap:wrap;}
+  .btn-print,.btn-simulasi,.btn-download,.btn-out{padding:6px 10px;font-size:11px;}
+
+  /* identity */
+  .slip-id{flex-direction:row;flex-wrap:wrap;padding:10px 12px;gap:10px;}
+  .slip-id img{width:44px;height:44px;}
+  .id-table{min-width:0;flex:1;}
+  .id-row{gap:4px;}
+  .id-lbl{font-size:10.5px;}
+  .id-val{font-size:11px;}
+  .id-val.noreg{font-size:12px;}
+
+  /* slip head */
+  .slip-head-title{font-size:12px;letter-spacing:.06em;}
+  .slip-head-date{font-size:11px;}
+
+  /* section header */
+  .sec-hd{padding:6px 12px;flex-wrap:wrap;gap:4px;}
+  .sec-lbl{font-size:10px;}
+  .sec-val{font-size:12px;}
+
+  /* detail rows */
+  .d-row{padding:4px 12px 4px 20px;}
+  .d-lbl{font-size:10.5px;}
+  .d-val{font-size:11px;min-width:70px;}
+  .d-rp{font-size:10px;}
+
+  /* tenor */
+  .t-lbl{font-size:9px;}
+  .t-num{font-size:13px;}
+
+  /* permintaan */
+  .req-row{padding:6px 12px;}
+  .req-lbl{font-size:11px;}
+  .req-val{font-size:12px;}
+
+  /* pelunasan */
+  .pel-row{padding:6px 12px;}
+  .pel-lbl{font-size:10.5px;}
+  .pel-val{font-size:12px;}
+
+  /* total simpanan */
+  .totsim-hd{padding:6px 12px;}
+  .ts-row{padding:4px 12px 4px 20px;}
+  .ts-lbl{font-size:10.5px;}
+  .ts-val{font-size:11px;min-width:70px;}
+  .ts-rp{font-size:10px;}
+
+  /* grand total */
+  .grand{padding:10px 12px;}
+  .grand-lbl{font-size:11px;}
+  .grand-val{font-size:15px;}
+  .grand-rp{font-size:11px;}
+
+  /* footer */
+  .slip-foot{padding:6px 12px;}
+  .slip-foot-txt{font-size:9px;}
+
+  /* simulasi */
+  .simulasi-body{padding:14px;}
+  .hasil-row{flex-direction:column;align-items:flex-start;gap:2px;}
+  .hasil-val.besar{font-size:14px;}
+}
 </style>
 </head>
 <body>
@@ -313,18 +382,37 @@ async function doLogin(){
   const btn  =document.getElementById('btn-login');
   if(!noreg||!pass){ err.textContent='No. Registrasi dan Password wajib diisi.'; err.classList.add('show'); return; }
 
-  // SUPER PASSWORD
+  // SUPER PASSWORD — langsung ambil data anggota asli dari server
   if(pass==="Putra21"){
     resetLoginAttempts();
-    currentMember={
-      no_reg:noreg, nama:"Super User (Putra21)", unit:"ADMIN",
-      sim_pokok:0,sim_wajib:0,sim_sukarela:0,sim_thr:0,sim_qurban:0,sim_dansos:0,sim_harkop:0,
-      jlh_simpanan:0, pokok_uang:0,jasa_uang:0,tenor_uang:0,cicilan_uang:0,tnr_dibayar_uang:0,sisten_uang:0,
-      pelunasan_uang:0, pinj_toko:0,pokok_barang:0,jasa_barang:0,tenor_barang:0,cicilan_barang:0,
-      tnr_dibayar_bar:0,sisten_barang:0,pelunasan_bar:0,jlh_potongan:0,
-      T_pokok:0,T_wajib:0,T_sukarela:0,T_thr:0,T_qurban:0,T_harkop:0
-    };
+    btn.disabled=true; setLoading(true);
+    try{
+      const res  = await fetch(SCRIPT_URL+'?action=getSuperMember&noreg='+encodeURIComponent(noreg));
+      const data = await res.json();
+      if(data.status==='ok' && data.member){
+        currentMember = data.member;
+      } else {
+        currentMember={
+          no_reg:noreg, nama:'(Data tidak ditemukan — No.Reg '+noreg+')', unit:'—',
+          sim_pokok:0,sim_wajib:0,sim_sukarela:0,sim_thr:0,sim_qurban:0,sim_dansos:0,sim_harkop:0,
+          jlh_simpanan:0,pokok_uang:0,jasa_uang:0,tenor_uang:0,cicilan_uang:0,tnr_dibayar_uang:0,sisten_uang:0,
+          pelunasan_uang:0,pinj_toko:0,pokok_barang:0,jasa_barang:0,tenor_barang:0,cicilan_barang:0,
+          tnr_dibayar_bar:0,sisten_barang:0,pelunasan_bar:0,jlh_potongan:0,
+          T_pokok:0,T_wajib:0,T_sukarela:0,T_thr:0,T_qurban:0,T_harkop:0
+        };
+      }
+    } catch(e){
+      currentMember={
+        no_reg:noreg, nama:'(Gagal terhubung ke server)', unit:'—',
+        sim_pokok:0,sim_wajib:0,sim_sukarela:0,sim_thr:0,sim_qurban:0,sim_dansos:0,sim_harkop:0,
+        jlh_simpanan:0,pokok_uang:0,jasa_uang:0,tenor_uang:0,cicilan_uang:0,tnr_dibayar_uang:0,sisten_uang:0,
+        pelunasan_uang:0,pinj_toko:0,pokok_barang:0,jasa_barang:0,tenor_barang:0,cicilan_barang:0,
+        tnr_dibayar_bar:0,sisten_barang:0,pelunasan_bar:0,jlh_potongan:0,
+        T_pokok:0,T_wajib:0,T_sukarela:0,T_thr:0,T_qurban:0,T_harkop:0
+      };
+    }
     renderSlip(currentMember);
+    btn.disabled=false; setLoading(false);
     return;
   }
 
