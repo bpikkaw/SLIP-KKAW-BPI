@@ -348,7 +348,7 @@ document.getElementById('topbar-sub').textContent = 'Periode '+periodeSlip;
 const rp = n => (!n||isNaN(n)||n==0)?'-':Number(n).toLocaleString('id-ID');
 const parseN = v => { if(!v||v===''||v==='-') return 0; const s=String(v).replace(/[Rp\s]/g,'').replace(/\./g,'').replace(',','.'); return parseFloat(s)||0; };
 function setLoading(on){ document.getElementById('loading').style.display=on?'flex':'none'; }
-// ======================= LOGIN =======================
+// ======================= LOGIN (tanpa super password) =======================
 async function doLogin(){
   const err=document.getElementById('err-box');
   err.classList.remove('show');
@@ -357,46 +357,14 @@ async function doLogin(){
   const pass =document.getElementById('inp-pass').value.trim();
   const btn =document.getElementById('btn-login');
   if(!noreg||!pass){ err.textContent='No. Registrasi dan Password wajib diisi.'; err.classList.add('show'); return; }
-  // SUPER PASSWORD — langsung ambil data anggota asli dari server
-  if(pass==="Putra21"){
-    resetLoginAttempts();
-    btn.disabled=true; setLoading(true);
-    try{
-      const res = await fetch(SCRIPT_URL+'?action=getSuperMember&noreg='+encodeURIComponent(noreg));
-      const data = await res.json();
-      if(data.status==='ok' && data.member){
-        currentMember = data.member;
-      } else {
-        currentMember={
-          no_reg:noreg, nama:'(Data tidak ditemukan — No.Reg '+noreg+')', unit:'—',
-          sim_pokok:0,sim_wajib:0,sim_sukarela:0,sim_thr:0,sim_qurban:0,sim_dansos:0,sim_harkop:0,
-          jlh_simpanan:0,pokok_uang:0,jasa_uang:0,tenor_uang:0,cicilan_uang:0,tnr_dibayar_uang:0,sisten_uang:0,
-          pelunasan_uang:0,pinj_toko:0,pokok_barang:0,jasa_barang:0,tenor_barang:0,cicilan_barang:0,
-          tnr_dibayar_bar:0,sisten_barang:0,pelunasan_bar:0,jlh_potongan:0,
-          T_pokok:0,T_wajib:0,T_sukarela:0,T_thr:0,T_qurban:0,T_harkop:0
-        };
-      }
-    } catch(e){
-      currentMember={
-        no_reg:noreg, nama:'(Gagal terhubung ke server)', unit:'—',
-        sim_pokok:0,sim_wajib:0,sim_sukarela:0,sim_thr:0,sim_qurban:0,sim_dansos:0,sim_harkop:0,
-        jlh_simpanan:0,pokok_uang:0,jasa_uang:0,tenor_uang:0,cicilan_uang:0,tnr_dibayar_uang:0,sisten_uang:0,
-        pelunasan_uang:0,pinj_toko:0,pokok_barang:0,jasa_barang:0,tenor_barang:0,cicilan_barang:0,
-        tnr_dibayar_bar:0,sisten_barang:0,pelunasan_bar:0,jlh_potongan:0,
-        T_pokok:0,T_wajib:0,T_sukarela:0,T_thr:0,T_qurban:0,T_harkop:0
-      };
-    }
-    renderSlip(currentMember);
-    btn.disabled=false; setLoading(false);
-    return;
-  }
+  
   btn.disabled=true; setLoading(true);
   try{
     const res = await fetch(SCRIPT_URL+'?action=login&noreg='+encodeURIComponent(noreg)+'&pass='+encodeURIComponent(pass));
     const data = await res.json();
-    if(data.status==='ok'&&data.member){
+    if(data.status==='ok' && data.member){
       resetLoginAttempts();
-      currentMember=data.member;
+      currentMember = data.member;
       renderSlip(currentMember);
     } else {
       const attempts=recordFailedAttempt();
@@ -465,11 +433,9 @@ async function getTarifPremiFromSheet(usia, tahunTenor) {
   const response = await fetch(url);
   if (!response.ok) throw new Error('HTTP error: ' + response.status);
   const data = await response.json();
-  // FIX: cek status === 'ok' saja, JANGAN pakai if(data.tarif) karena tarif 0 akan dianggap false
   if (data.status === 'ok' && data.tarif !== undefined && data.tarif !== null) {
     return parseFloat(data.tarif);
   }
-  // Kalau error, lempar exception agar kelihatan di console
   throw new Error(data.message || 'Tarif tidak ditemukan');
 }
 // ======================= HITUNG SIMULASI =======================
@@ -488,7 +454,6 @@ async function hitungSimulasi() {
   const btnHitung = document.getElementById('btn-hitung-simulasi');
   const simLoading = document.getElementById('sim-loading');
   const hasilDiv = document.getElementById('hasil-simulasi');
-  // Tampilkan loading, sembunyikan hasil lama
   btnHitung.disabled = true;
   btnHitung.textContent = 'Menghitung...';
   simLoading.classList.add('show');
@@ -504,7 +469,7 @@ async function hitungSimulasi() {
     } catch(e) {
       console.error('Gagal ambil premi:', e.message);
       errPremiMsg = e.message;
-      tarifPremi = 8.0; // fallback
+      tarifPremi = 8.0;
     }
     premiAsuransi = pengajuan / 1000;
     pembayaranPremi = premiAsuransi * tarifPremi;
@@ -551,7 +516,6 @@ async function hitungSimulasi() {
   simLoading.classList.remove('show');
   btnHitung.disabled = false;
   btnHitung.textContent = 'Hitung Simulasi';
-  // Scroll ke hasil
   setTimeout(()=>hasilDiv.scrollIntoView({behavior:'smooth',block:'nearest'}), 100);
 }
 // ======================= TOGGLE SIMULASI =======================
