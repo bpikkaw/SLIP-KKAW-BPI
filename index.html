@@ -99,8 +99,67 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
 .row-sim input,.row-sim select{width:100%;padding:10px 12px;border:1px solid #ccc;border-radius:8px;font-family:inherit;font-size:14px;}
 .radio-group{display:flex;flex-direction:column;gap:8px;margin-top:2px;}
 .check-group{display:flex;flex-direction:column;gap:8px;margin-top:2px;}
-.check-group label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;font-weight:normal;cursor:pointer;}
-.pel-info{color:#c62828;font-weight:600;font-size:13px;}
+
+/* ===== PERBAIKAN UTAMA: KOTAK SHADOW UNTUK RADIO & CHECKBOX ===== */
+.radio-group label,
+.check-group label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid #e0e4f5;
+  border-radius: 14px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  font-weight: 500;
+  font-size: 13px;
+  color: #1a237e;
+}
+/* Hover: shadow lebih jelas */
+.radio-group label:hover,
+.check-group label:hover {
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+  border-color: #ff8f00;
+  transform: translateY(-1px);
+}
+/* Saat item dipilih (input di dalam label sedang checked) */
+.radio-group label:has(input:checked),
+.check-group label:has(input:checked) {
+  border-color: #1a237e;
+  box-shadow: 0 6px 16px rgba(26, 35, 126, 0.2);
+  background: #f5f7ff;
+}
+/* Untuk radio, atur jarak antara radio dan teks */
+.radio-group label input[type="radio"] {
+  margin-right: 12px;
+  width: 18px;
+  height: 18px;
+  accent-color: #1a237e;
+}
+/* Untuk checkbox, karena struktur di dalam label ada <span> dan <input>, kita buat teks kiri, checkbox kanan */
+.check-group label span {
+  flex: 1;
+  text-align: left;
+}
+.check-group label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-left: 12px;
+  accent-color: #1a237e;
+}
+/* Tambahan untuk teks nominal pelunasan (pel-info) agar tidak terpotong */
+.pel-info {
+  font-weight: 600;
+  color: #c62828;
+  margin-left: 6px;
+}
+/* Sesuaikan margin di dalam check-group */
+.check-group label {
+  gap: 8px;
+}
+
 .btn-hitung{background:#1a237e;color:white;border:none;padding:12px;border-radius:8px;font-weight:800;cursor:pointer;margin-top:10px;font-size:14px;width:100%;font-family:inherit;}
 .btn-hitung:disabled{opacity:0.6;cursor:not-allowed;}
 .hasil-simulasi{margin-top:20px;background:#f5f7ff;padding:16px;border-radius:12px;border-left:5px solid #ff8f00;}
@@ -119,7 +178,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
 .spinner{width:36px;height:36px;border:3px solid #dde3f5;border-top-color:#1a237e;border-radius:50%;animation:spin 1s linear infinite;}
 .loading-txt{font-size:12px;color:#666;font-weight:600;}
 @keyframes spin{to{transform:rotate(360deg);}}
-/* Loading simulasi (inline, bukan overlay) */
+/* Loading simulasi (inline) */
 .sim-loading{display:none;text-align:center;padding:16px;color:#666;font-size:13px;}
 .sim-loading.show{display:block;}
 .sim-spinner{display:inline-block;width:20px;height:20px;border:2px solid #dde3f5;border-top-color:#ff8f00;border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:8px;}
@@ -128,11 +187,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
   body{padding:8px;}
   .slip-wrap{max-width:100%;}
   .login-wrap{max-width:100%;}
-  /* topbar */
   .slip-topbar{flex-direction:column;align-items:flex-start;}
   .topbar-btns{width:100%;justify-content:flex-start;flex-wrap:wrap;}
   .btn-print,.btn-simulasi,.btn-download,.btn-out{padding:6px 10px;font-size:11px;}
-  /* identity */
   .slip-id{flex-direction:row;flex-wrap:wrap;padding:10px 12px;gap:10px;}
   .slip-id img{width:44px;height:44px;}
   .id-table{min-width:0;flex:1;}
@@ -140,47 +197,42 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
   .id-lbl{font-size:10.5px;}
   .id-val{font-size:11px;}
   .id-val.noreg{font-size:12px;}
-  /* slip head */
   .slip-head-title{font-size:12px;letter-spacing:.06em;}
   .slip-head-date{font-size:11px;}
-  /* section header */
   .sec-hd{padding:6px 12px;flex-wrap:wrap;gap:4px;}
   .sec-lbl{font-size:10px;}
   .sec-val{font-size:12px;}
-  /* detail rows */
   .d-row{padding:4px 12px 4px 20px;}
   .d-lbl{font-size:10.5px;}
   .d-val{font-size:11px;min-width:70px;}
   .d-rp{font-size:10px;}
-  /* tenor */
   .t-lbl{font-size:9px;}
   .t-num{font-size:13px;}
-  /* permintaan */
   .req-row{padding:6px 12px;}
   .req-lbl{font-size:11px;}
   .req-val{font-size:12px;}
-  /* pelunasan */
   .pel-row{padding:6px 12px;}
   .pel-lbl{font-size:10.5px;}
   .pel-val{font-size:12px;}
-  /* total simpanan */
   .totsim-hd{padding:6px 12px;}
   .ts-row{padding:4px 12px 4px 20px;}
   .ts-lbl{font-size:10.5px;}
   .ts-val{font-size:11px;min-width:70px;}
   .ts-rp{font-size:10px;}
-  /* grand total */
   .grand{padding:10px 12px;}
   .grand-lbl{font-size:11px;}
   .grand-val{font-size:15px;}
   .grand-rp{font-size:11px;}
-  /* footer */
   .slip-foot{padding:6px 12px;}
   .slip-foot-txt{font-size:9px;}
-  /* simulasi */
   .simulasi-body{padding:14px;}
   .hasil-row{flex-direction:column;align-items:flex-start;gap:2px;}
   .hasil-val.besar{font-size:14px;}
+  /* Responsif untuk kotak shadow */
+  .radio-group label, .check-group label {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
 }
 </style>
 </head>
@@ -275,7 +327,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
         </div>
         <button class="btn-hitung" id="btn-hitung-simulasi">Hitung Simulasi</button>
       </div>
-      <!-- Loading simulasi inline -->
       <div class="sim-loading" id="sim-loading">
         <span class="sim-spinner"></span> Mengambil tarif premi dari server...
       </div>
@@ -348,7 +399,7 @@ document.getElementById('topbar-sub').textContent = 'Periode '+periodeSlip;
 const rp = n => (!n||isNaN(n)||n==0)?'-':Number(n).toLocaleString('id-ID');
 const parseN = v => { if(!v||v===''||v==='-') return 0; const s=String(v).replace(/[Rp\s]/g,'').replace(/\./g,'').replace(',','.'); return parseFloat(s)||0; };
 function setLoading(on){ document.getElementById('loading').style.display=on?'flex':'none'; }
-// ======================= LOGIN (tanpa super password) =======================
+// ======================= LOGIN =======================
 async function doLogin(){
   const err=document.getElementById('err-box');
   err.classList.remove('show');
@@ -427,7 +478,7 @@ function renderSlip(m){
   document.getElementById('slip-body').innerHTML=html;
   document.getElementById('simulasi-panel').classList.remove('show');
 }
-// ======================= GET TARIF PREMI (FIXED) =======================
+// ======================= GET TARIF PREMI =======================
 async function getTarifPremiFromSheet(usia, tahunTenor) {
   const url = `${SCRIPT_URL}?action=getPremi&usia=${usia}&tahun=${tahunTenor}`;
   const response = await fetch(url);
