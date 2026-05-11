@@ -316,16 +316,16 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
           <label>Gunakan Pelunasan:</label>
           <div class="check-group">
             <label>
-              <span>Pelunasan SP &nbsp;<span class="pel-info">(Rp <span id="label-pelunasan-sp">0</span>)</span></span>
+              <span>Pelunasan Pinjaman Uang &nbsp;<span class="pel-info">(Rp <span id="label-pelunasan-sp">0</span>)</span></span>
               <input type="checkbox" id="cb-pelunasan-sp">
             </label>
             <label>
-              <span>Pelunasan PU &nbsp;<span class="pel-info">(Rp <span id="label-pelunasan-pu">0</span>)</span></span>
+              <span>Pelunasan Pinjaman Barang &nbsp;<span class="pel-info">(Rp <span id="label-pelunasan-pu">0</span>)</span></span>
               <input type="checkbox" id="cb-pelunasan-pu">
             </label>
           </div>
         </div>
-        <button class="btn-hitung" id="btn-hitung-simulasi">Hitung Simulasi</button>
+        <button class="btn-hitung" id="btn-hitung-simulasi">Hitung Simulasi Top-Up/Tajongan </button>
       </div>
       <div class="sim-loading" id="sim-loading">
         <span class="sim-spinner"></span> Mengambil tarif premi dari server...
@@ -520,7 +520,7 @@ async function hitungSimulasi() {
     } catch(e) {
       console.error('Gagal ambil premi:', e.message);
       errPremiMsg = e.message;
-      tarifPremi = 8.0;
+      tarifPremi = 18.07;
     }
     premiAsuransi = pengajuan / 1000;
     pembayaranPremi = premiAsuransi * tarifPremi;
@@ -538,11 +538,11 @@ async function hitungSimulasi() {
     detailPremi = `
       <div class="bg-kuning" style="margin-bottom:12px;">
         ${warningErr}
-        <div class="hasil-row"><span class="hasil-lbl">Usia:</span><span class="hasil-val">${usia} tahun</span></div>
-        <div class="hasil-row"><span class="hasil-lbl">Tenor (pembulatan tahun):</span><span class="hasil-val">${tahunTenor} tahun</span></div>
-        <div class="hasil-row"><span class="hasil-lbl">Tarif Premi (dari tabel):</span><span class="hasil-val">${tarifPremi}</span></div>
-        <div class="hasil-row"><span class="hasil-lbl">Premi Asuransi (pengajuan ÷ 1000):</span><span class="hasil-val">Rp ${rp(premiAsuransi)}</span></div>
-        <div class="hasil-row"><span class="hasil-lbl">Pembayaran Premi:</span><span class="hasil-val">Rp ${rp(pembayaranPremi)}</span></div>
+        <div class="hasil-row"><span class="hasil-lbl">Usia </span><span class="hasil-val">${usia} tahun</span></div>
+        <div class="hasil-row"><span class="hasil-lbl">Tenor </span><span class="hasil-val">${tahunTenor} tahun</span></div>
+        <div class="hasil-row"><span class="hasil-lbl">Tarif Premi </span><span class="hasil-val">${tarifPremi}</span></div>
+        <div class="hasil-row"><span class="hasil-lbl">Premi Asuransi </span><span class="hasil-val">Rp ${rp(premiAsuransi)}</span></div>
+        <div class="hasil-row"><span class="hasil-lbl">Pembayaran Premi </span><span class="hasil-val">Rp ${rp(pembayaranPremi)}</span></div>
       </div>`;
   } else {
     detailPremi = `
@@ -552,15 +552,15 @@ async function hitungSimulasi() {
   }
   hasilDiv.innerHTML = `
     ${detailPremi}
-    <div class="hasil-row"><span class="hasil-lbl">Pelunasan SP:</span><span class="hasil-val txt-merah">Rp ${rp(pelunasanSP)}</span></div>
-    <div class="hasil-row"><span class="hasil-lbl">Pelunasan PU:</span><span class="hasil-val txt-merah">Rp ${rp(pelunasanPU)}</span></div>
-    ${kenaPremi?`<div class="hasil-row"><span class="hasil-lbl">Pembayaran Premi:</span><span class="hasil-val txt-merah">Rp ${rp(pembayaranPremi)}</span></div>`:''}
-    <div class="hasil-row"><span class="hasil-lbl">Uang yang diterima:</span><span class="hasil-val txt-hijau besar">Rp ${rp(uangDiterima)}</span></div>
+    <div class="hasil-row"><span class="hasil-lbl">Pelunasan Pinjaman Uang </span><span class="hasil-val txt-merah">Rp ${rp(pelunasanSP)}</span></div>
+    <div class="hasil-row"><span class="hasil-lbl">Pelunasan Pinjaman Barang </span><span class="hasil-val txt-merah">Rp ${rp(pelunasanPU)}</span></div>
+    ${kenaPremi?`<div class="hasil-row"><span class="hasil-lbl">Pembayaran Premi </span><span class="hasil-val txt-merah">Rp ${rp(pembayaranPremi)}</span></div>`:''}
+    <div class="hasil-row"><span class="hasil-lbl">Uang yang diterima </span><span class="hasil-val txt-hijau besar">Rp ${rp(uangDiterima)}</span></div>
     <div style="margin-top:16px;border-top:1px dashed #ccc;padding-top:12px;">
-      <div class="hasil-row"><span class="hasil-lbl">Pokok per bulan:</span><span class="hasil-val">Rp ${rp(pokokPerBulan)}</span></div>
-      <div class="hasil-row"><span class="hasil-lbl">Jasa per bulan (${jasaRate}%):</span><span class="hasil-val">Rp ${rp(jasaPerBulan)}</span></div>
+      <div class="hasil-row"><span class="hasil-lbl">Cicilan Pokok per bulan </span><span class="hasil-val">Rp ${rp(pokokPerBulan)}</span></div>
+      <div class="hasil-row"><span class="hasil-lbl">Cicilan Jasa per bulan (${jasaRate}%) </span><span class="hasil-val">Rp ${rp(jasaPerBulan)}</span></div>
       <div class="highlight-biru">
-        <div class="hasil-row"><span class="hasil-lbl">⭐ Jumlah Pembayaran Pinjaman per bulan:</span><span class="hasil-val besar">Rp ${rp(jumlahPembayaran)}</span></div>
+        <div class="hasil-row"><span class="hasil-lbl">⭐ Jumlah Pembayaran Pinjaman per bulan </span><span class="hasil-val besar">Rp ${rp(jumlahPembayaran)}</span></div>
       </div>
     </div>`;
   hasilDiv.style.display = 'block';
