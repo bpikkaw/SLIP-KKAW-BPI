@@ -35,7 +35,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
 .btn-print{background:linear-gradient(135deg,#1a237e,#3949ab);color:#fff;}
 .btn-simulasi{background:#ff8f00;color:#fff;display:flex;align-items:center;gap:6px;}
 .btn-download{background:#2e7d32;color:#fff;}
-.btn-out{background:#fff;color:#666;border:1.5px solid #ddd;}
+.btn-out{background:#fff;color:#666;border:1.5px solid #ddd;}.btn-toko{background:linear-gradient(135deg,#e65100,#ff8f00);color:#fff;}
 .btn-print:hover,.btn-simulasi:hover,.btn-download:hover{opacity:.9;}
 .btn-out:hover{background:#f5f5f5;}
 .slip-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.10);}
@@ -168,7 +168,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
       <button class="btn-simulasi" id="btn-toggle-simulasi">&#x1F9EE; Simulasi Pinjaman</button>
       <button class="btn-print" onclick="window.print()">&#x1F5A8;&#xFE0F; Print</button>
       <button class="btn-download" id="btn-download" onclick="downloadSlipJPG()">&#x1F4F8; Download JPG</button>
-      <button class="btn-out" onclick="doLogout()">Keluar</button>
+      <button class="btn-toko btn-print" onclick="window.open('http://www.toko.kkawbpi.my.id/','_blank')">&#x1F6D2; Toko Online</button><button class="btn-out" onclick="doLogout()">Keluar</button>
     </div>
   </div>
   <div class="slip-card">
