@@ -250,7 +250,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
       <span class="di-icon">🚪</span> Keluar
     </button>
   </div>
-  <div class="drawer-foot">KKAW BPI · Sistem Slip Potongan</div>
+  <div class="drawer-foot">KKAW BPI · Sistem Slip Potongan · <strong>v4.9.1</strong></div>
 </div>
 
 <!-- LOGIN -->
@@ -356,6 +356,32 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
 // ======================= KONFIGURASI =======================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxiCBJyf0RujDO1lhuic31d9F8zTrfFgjXxvkvyvGcnlK3psZPZaX318TmlrE5v-fpYg/exec";
 let currentMember = null;
+const SESSION_KEY   = 'kkaw_session_member';
+const SESSION_EXP   = 'kkaw_session_exp';
+const SESSION_HOURS = 1; // max 1 jam
+
+function saveSession(member){
+  const exp = Date.now() + SESSION_HOURS * 60 * 60 * 1000;
+  localStorage.setItem(SESSION_KEY, JSON.stringify(member));
+  localStorage.setItem(SESSION_EXP, exp);
+}
+function loadSession(){
+  try{
+    const exp = parseInt(localStorage.getItem(SESSION_EXP)||'0');
+    if(!exp || Date.now() > exp){ clearSession(); return null; }
+    const raw = localStorage.getItem(SESSION_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e){ clearSession(); return null; }
+}
+function clearSession(){
+  localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(SESSION_EXP);
+}
+function getSessionMinsLeft(){
+  const exp = parseInt(localStorage.getItem(SESSION_EXP)||'0');
+  if(!exp) return 0;
+  return Math.max(0, Math.ceil((exp - Date.now()) / 60000));
+}
 
 // ======================= LOCKOUT =======================
 const STORAGE_KEY = 'kkaow_login_attempts';
@@ -451,6 +477,7 @@ async function doLogin(){
     if(data.status==='ok' && data.member){
       resetLoginAttempts();
       currentMember = data.member;
+      saveSession(currentMember);
       renderSlip(currentMember);
     } else {
       const attempts=recordFailedAttempt();
@@ -660,6 +687,7 @@ function doLogout(){
   document.getElementById('simulasi-panel').classList.remove('show');
   document.getElementById('hasil-simulasi').style.display='none';
   currentMember=null;
+  clearSession();
   closeDrawer();
   updateLockoutUI();
 }
@@ -669,6 +697,21 @@ document.getElementById('btn-toggle-simulasi').addEventListener('click', toggleS
 document.getElementById('btn-hitung-simulasi').addEventListener('click', hitungSimulasi);
 updateLockoutUI();
 setInterval(()=>{ if(isLockedOut()) updateLockoutUI(); }, 1000);
+
+// Restore sesi jika masih valid (refresh tidak logout)
+const savedMember = loadSession();
+if(savedMember){
+  currentMember = savedMember;
+  renderSlip(currentMember);
+}
+
+// Auto logout setelah sesi habis (cek tiap 30 detik)
+setInterval(()=>{
+  if(currentMember && getSessionMinsLeft() <= 0){
+    alert('Sesi Anda telah berakhir (1 jam). Silakan login kembali.');
+    doLogout();
+  }
+}, 30000);
 </script>
 </body>
 </html>
