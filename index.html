@@ -26,17 +26,47 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
 .err-box{background:#fff5f5;border:1px solid #ffcdd2;color:#c62828;border-radius:8px;padding:9px 13px;font-size:12px;margin-top:12px;display:none;text-align:center;}
 .err-box.show{display:block;}
 .slip-wrap{width:100%;max-width:540px;display:none;}
+
+/* ===== TOPBAR ===== */
 .slip-topbar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;}
 .slip-topbar-info strong{font-size:14px;font-weight:800;color:#1a237e;display:block;}
 .slip-topbar-info span{font-size:11px;color:#888;}
 .topbar-btns{display:flex;flex-wrap:wrap;gap:8px;}
-.btn-print,.btn-simulasi,.btn-download,.btn-out{border:none;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;}
+.btn-print,.btn-simulasi,.btn-download,.btn-out,.btn-toko,.btn-menu{border:none;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;}
 .btn-print{background:linear-gradient(135deg,#1a237e,#3949ab);color:#fff;}
 .btn-simulasi{background:#ff8f00;color:#fff;display:flex;align-items:center;gap:6px;}
 .btn-download{background:#2e7d32;color:#fff;}
 .btn-out{background:#fff;color:#666;border:1.5px solid #ddd;}
-.btn-print:hover,.btn-simulasi:hover,.btn-download:hover{opacity:.9;}
+.btn-toko{background:#29b6f6;color:#fff;}
+.btn-menu{background:#fff;color:#1a237e;border:1.5px solid #c5cae9;font-size:18px;padding:6px 12px;line-height:1;}
+.btn-print:hover,.btn-simulasi:hover,.btn-download:hover,.btn-toko:hover{opacity:.9;}
 .btn-out:hover{background:#f5f5f5;}
+.btn-menu:hover{background:#f0f4ff;}
+
+/* ===== DRAWER ===== */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1000;opacity:0;pointer-events:none;transition:opacity .3s ease;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;left:0;width:270px;height:100%;background:#fff;z-index:1001;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:4px 0 24px rgba(0,0,0,0.13);display:flex;flex-direction:column;}
+.drawer.open{transform:translateX(0);}
+.drawer-head{background:#0d1b4b;padding:20px 18px 16px;display:flex;align-items:center;gap:12px;}
+.drawer-head img{width:42px;height:42px;object-fit:contain;}
+.drawer-head-txt strong{font-size:14px;font-weight:800;color:#fff;display:block;}
+.drawer-head-txt span{font-size:10px;color:#90caf9;}
+.drawer-close{margin-left:auto;background:none;border:none;color:#90caf9;font-size:22px;cursor:pointer;line-height:1;padding:2px 4px;}
+.drawer-close:hover{color:#fff;}
+.drawer-member{padding:14px 18px;background:#f0f4ff;border-bottom:1px solid #e0e4f5;}
+.drawer-member-name{font-size:13px;font-weight:800;color:#1a237e;margin-bottom:2px;}
+.drawer-member-sub{font-size:11px;color:#888;}
+.drawer-nav{flex:1;padding:10px 0;overflow-y:auto;}
+.drawer-item{display:flex;align-items:center;gap:13px;padding:13px 20px;font-size:13px;font-weight:600;color:#333;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:inherit;transition:background .15s;}
+.drawer-item:hover{background:#f5f7ff;color:#1a237e;}
+.drawer-item .di-icon{font-size:18px;width:26px;text-align:center;}
+.drawer-item.active{background:#e8edf8;color:#1a237e;font-weight:800;}
+.drawer-item.danger{color:#c62828;}
+.drawer-item.danger:hover{background:#fff5f5;}
+.drawer-divider{height:1px;background:#f0f0f0;margin:6px 16px;}
+.drawer-foot{padding:14px 18px;font-size:10px;color:#bbb;border-top:1px solid #f0f0f0;text-align:center;}
+
 .slip-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.10);}
 .slip-head{background:#0d1b4b;padding:14px 20px;text-align:center;}
 .slip-head-title{font-size:15px;font-weight:800;color:#fff;letter-spacing:.12em;text-transform:uppercase;}
@@ -99,67 +129,14 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
 .row-sim input,.row-sim select{width:100%;padding:10px 12px;border:1px solid #ccc;border-radius:8px;font-family:inherit;font-size:14px;}
 .radio-group{display:flex;flex-direction:column;gap:8px;margin-top:2px;}
 .check-group{display:flex;flex-direction:column;gap:8px;margin-top:2px;}
-
-/* ===== PERBAIKAN UTAMA: KOTAK SHADOW UNTUK RADIO & CHECKBOX ===== */
-.radio-group label,
-.check-group label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #ffffff;
-  border: 1px solid #e0e4f5;
-  border-radius: 14px;
-  padding: 12px 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  font-weight: 500;
-  font-size: 13px;
-  color: #1a237e;
-}
-/* Hover: shadow lebih jelas */
-.radio-group label:hover,
-.check-group label:hover {
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
-  border-color: #ff8f00;
-  transform: translateY(-1px);
-}
-/* Saat item dipilih (input di dalam label sedang checked) */
-.radio-group label:has(input:checked),
-.check-group label:has(input:checked) {
-  border-color: #1a237e;
-  box-shadow: 0 6px 16px rgba(26, 35, 126, 0.2);
-  background: #f5f7ff;
-}
-/* Untuk radio, atur jarak antara radio dan teks */
-.radio-group label input[type="radio"] {
-  margin-right: 12px;
-  width: 18px;
-  height: 18px;
-  accent-color: #1a237e;
-}
-/* Untuk checkbox, karena struktur di dalam label ada <span> dan <input>, kita buat teks kiri, checkbox kanan */
-.check-group label span {
-  flex: 1;
-  text-align: left;
-}
-.check-group label input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  margin-left: 12px;
-  accent-color: #1a237e;
-}
-/* Tambahan untuk teks nominal pelunasan (pel-info) agar tidak terpotong */
-.pel-info {
-  font-weight: 600;
-  color: #c62828;
-  margin-left: 6px;
-}
-/* Sesuaikan margin di dalam check-group */
-.check-group label {
-  gap: 8px;
-}
-
+.radio-group label,.check-group label{display:flex;align-items:center;justify-content:space-between;background:#ffffff;border:1px solid #e0e4f5;border-radius:14px;padding:12px 16px;cursor:pointer;transition:all 0.2s ease;box-shadow:0 2px 5px rgba(0,0,0,0.05);font-weight:500;font-size:13px;color:#1a237e;}
+.radio-group label:hover,.check-group label:hover{box-shadow:0 6px 14px rgba(0,0,0,0.1);border-color:#ff8f00;transform:translateY(-1px);}
+.radio-group label:has(input:checked),.check-group label:has(input:checked){border-color:#1a237e;box-shadow:0 6px 16px rgba(26,35,126,0.2);background:#f5f7ff;}
+.radio-group label input[type="radio"]{margin-right:12px;width:18px;height:18px;accent-color:#1a237e;}
+.check-group label span{flex:1;text-align:left;}
+.check-group label input[type="checkbox"]{width:18px;height:18px;margin-left:12px;accent-color:#1a237e;}
+.pel-info{font-weight:600;color:#c62828;margin-left:6px;}
+.check-group label{gap:8px;}
 .btn-hitung{background:#1a237e;color:white;border:none;padding:12px;border-radius:8px;font-weight:800;cursor:pointer;margin-top:10px;font-size:14px;width:100%;font-family:inherit;}
 .btn-hitung:disabled{opacity:0.6;cursor:not-allowed;}
 .hasil-simulasi{margin-top:20px;background:#f5f7ff;padding:16px;border-radius:12px;border-left:5px solid #ff8f00;}
@@ -172,24 +149,22 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
 .txt-merah{color:#c62828!important;}
 .txt-hijau{color:#2e7d32!important;}
 .highlight-biru{background-color:#e3f2fd;border-left:4px solid #1a237e;padding:8px 12px;border-radius:8px;margin-top:8px;}
-/* Loading overlay */
 #loading{position:fixed;inset:0;background:rgba(240,242,248,0.85);display:none;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:12px;}
 #loading.show{display:flex;}
 .spinner{width:36px;height:36px;border:3px solid #dde3f5;border-top-color:#1a237e;border-radius:50%;animation:spin 1s linear infinite;}
 .loading-txt{font-size:12px;color:#666;font-weight:600;}
 @keyframes spin{to{transform:rotate(360deg);}}
-/* Loading simulasi (inline) */
 .sim-loading{display:none;text-align:center;padding:16px;color:#666;font-size:13px;}
 .sim-loading.show{display:block;}
 .sim-spinner{display:inline-block;width:20px;height:20px;border:2px solid #dde3f5;border-top-color:#ff8f00;border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:8px;}
-@media print{body{background:#fff!important;padding:0;}.slip-topbar{display:none!important;}.slip-wrap{display:block!important;max-width:100%;}.slip-card{border-radius:0;box-shadow:none;}.login-wrap{display:none!important;}.simulasi-panel{display:none!important;}}
+@media print{body{background:#fff!important;padding:0;}.slip-topbar{display:none!important;}.slip-wrap{display:block!important;max-width:100%;}.slip-card{border-radius:0;box-shadow:none;}.login-wrap{display:none!important;}.simulasi-panel{display:none!important;}.drawer,.drawer-overlay{display:none!important;}}
 @media(max-width:600px){
   body{padding:8px;}
   .slip-wrap{max-width:100%;}
   .login-wrap{max-width:100%;}
   .slip-topbar{flex-direction:column;align-items:flex-start;}
   .topbar-btns{width:100%;justify-content:flex-start;flex-wrap:wrap;}
-  .btn-print,.btn-simulasi,.btn-download,.btn-out{padding:6px 10px;font-size:11px;}
+  .btn-print,.btn-simulasi,.btn-download,.btn-out,.btn-toko,.btn-menu{padding:6px 10px;font-size:11px;}
   .slip-id{flex-direction:row;flex-wrap:wrap;padding:10px 12px;gap:10px;}
   .slip-id img{width:44px;height:44px;}
   .id-table{min-width:0;flex:1;}
@@ -228,11 +203,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
   .simulasi-body{padding:14px;}
   .hasil-row{flex-direction:column;align-items:flex-start;gap:2px;}
   .hasil-val.besar{font-size:14px;}
-  /* Responsif untuk kotak shadow */
-  .radio-group label, .check-group label {
-    padding: 10px 12px;
-    font-size: 12px;
-  }
+  .radio-group label,.check-group label{padding:10px 12px;font-size:12px;}
+  .drawer{width:85%;}
 }
 </style>
 </head>
@@ -241,6 +213,46 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
   <div class="spinner"></div>
   <div class="loading-txt">Memverifikasi...</div>
 </div>
+
+<!-- DRAWER OVERLAY -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+
+<!-- DRAWER -->
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <img src="https://i.ibb.co/Fqch07FC/logo-kkaw-bpi-png.png" alt="KKAW BPI">
+    <div class="drawer-head-txt">
+      <strong>KKAW BPI</strong>
+      <span>Koperasi Konsumen Amanah Warga</span>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-member" id="drawer-member-info">
+    <div class="drawer-member-name" id="drawer-nama">—</div>
+    <div class="drawer-member-sub" id="drawer-noreg">—</div>
+  </div>
+  <div class="drawer-nav">
+    <button class="drawer-item" onclick="closeDrawer();toggleSimulasiPanel();">
+      <span class="di-icon">🧮</span> Simulasi Pinjaman
+    </button>
+    <button class="drawer-item" onclick="closeDrawer();window.open('http://www.toko.kkawbpi.my.id/','_blank');">
+      <span class="di-icon">🏪</span> Toko KKAW BPI
+    </button>
+    <div class="drawer-divider"></div>
+    <button class="drawer-item" onclick="closeDrawer();window.print();">
+      <span class="di-icon">🖨️</span> Print Slip
+    </button>
+    <button class="drawer-item" onclick="closeDrawer();downloadSlipJPG();">
+      <span class="di-icon">📸</span> Download JPG
+    </button>
+    <div class="drawer-divider"></div>
+    <button class="drawer-item danger" onclick="closeDrawer();doLogout();">
+      <span class="di-icon">🚪</span> Keluar
+    </button>
+  </div>
+  <div class="drawer-foot">KKAW BPI · Sistem Slip Potongan</div>
+</div>
+
 <!-- LOGIN -->
 <div class="login-wrap" id="login-wrap">
   <div class="login-card">
@@ -259,6 +271,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
     <div class="err-box" id="err-box"></div>
   </div>
 </div>
+
 <!-- SLIP WRAP -->
 <div class="slip-wrap" id="slip-wrap">
   <div class="slip-topbar">
@@ -267,9 +280,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
       <span id="topbar-sub">—</span>
     </div>
     <div class="topbar-btns">
-      <button class="btn-simulasi" id="btn-toggle-simulasi">🧮 Simulasi Pinjaman</button>
+      <button class="btn-menu" onclick="openDrawer()" title="Menu">☰</button>
+      <button class="btn-toko" onclick="window.open('http://www.toko.kkawbpi.my.id/','_blank')">🏪 Toko</button>
+      <button class="btn-simulasi" id="btn-toggle-simulasi">🧮 Simulasi</button>
       <button class="btn-print" onclick="window.print()">🖨️ Print</button>
-      <button class="btn-download" id="btn-download" onclick="downloadSlipJPG()">📸 Download JPG</button>
+      <button class="btn-download" id="btn-download" onclick="downloadSlipJPG()">📸 JPG</button>
       <button class="btn-out" onclick="doLogout()">Keluar</button>
     </div>
   </div>
@@ -288,6 +303,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
     </div>
     <div id="slip-body"></div>
   </div>
+
   <!-- PANEL SIMULASI -->
   <div class="simulasi-panel" id="simulasi-panel">
     <div class="simulasi-header"><span>🧮</span> Simulasi Pinjaman KKAW BPI</div>
@@ -325,7 +341,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
             </label>
           </div>
         </div>
-        <button class="btn-hitung" id="btn-hitung-simulasi">Hitung Simulasi Top-Up/Tajongan </button>
+        <button class="btn-hitung" id="btn-hitung-simulasi">Hitung Simulasi Top-Up/Tajongan</button>
       </div>
       <div class="sim-loading" id="sim-loading">
         <span class="sim-spinner"></span> Mengambil tarif premi dari server...
@@ -334,11 +350,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f8;min-height:10
     </div>
   </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
 // ======================= KONFIGURASI =======================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxiCBJyf0RujDO1lhuic31d9F8zTrfFgjXxvkvyvGcnlK3psZPZaX318TmlrE5v-fpYg/exec";
 let currentMember = null;
+
 // ======================= LOCKOUT =======================
 const STORAGE_KEY = 'kkaow_login_attempts';
 const LOCKOUT_KEY = 'kkaow_login_lockout';
@@ -367,6 +385,7 @@ function updateLockoutUI(){
   const btn=document.getElementById('btn-login');
   const nrg=document.getElementById('inp-noreg');
   const pas=document.getElementById('inp-pass');
+  if(!btn) return;
   if(isLockedOut()){
     btn.disabled=nrg.disabled=pas.disabled=true;
     const e=document.getElementById('err-box');
@@ -383,6 +402,21 @@ function recordFailedAttempt(){
   if(n>=MAX_ATTEMPTS) setLockoutUntil(Date.now()+(LOCKOUT_MINUTES*60*1000));
   return n;
 }
+
+// ======================= DRAWER =======================
+function openDrawer(){
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+// Tutup drawer kalau tekan ESC
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeDrawer(); });
+
 // ======================= PERIODE SLIP =======================
 function getPeriodeSlip(){
   const today=new Date(), tgl=today.getDate(), bln=today.getMonth(), thn=today.getFullYear();
@@ -395,10 +429,12 @@ function getPeriodeSlip(){
 const periodeSlip = getPeriodeSlip();
 document.getElementById('slip-date').textContent = periodeSlip;
 document.getElementById('topbar-sub').textContent = 'Periode '+periodeSlip;
+
 // ======================= HELPERS =======================
 const rp = n => (!n||isNaN(n)||n==0)?'-':Number(n).toLocaleString('id-ID');
 const parseN = v => { if(!v||v===''||v==='-') return 0; const s=String(v).replace(/[Rp\s]/g,'').replace(/\./g,'').replace(',','.'); return parseFloat(s)||0; };
 function setLoading(on){ document.getElementById('loading').style.display=on?'flex':'none'; }
+
 // ======================= LOGIN =======================
 async function doLogin(){
   const err=document.getElementById('err-box');
@@ -406,9 +442,8 @@ async function doLogin(){
   if(isLockedOut()){ updateLockoutUI(); return; }
   const noreg=document.getElementById('inp-noreg').value.trim();
   const pass =document.getElementById('inp-pass').value.trim();
-  const btn =document.getElementById('btn-login');
+  const btn  =document.getElementById('btn-login');
   if(!noreg||!pass){ err.textContent='No. Registrasi dan Password wajib diisi.'; err.classList.add('show'); return; }
-  
   btn.disabled=true; setLoading(true);
   try{
     const res = await fetch(SCRIPT_URL+'?action=login&noreg='+encodeURIComponent(noreg)+'&pass='+encodeURIComponent(pass));
@@ -432,6 +467,7 @@ async function doLogin(){
   btn.disabled=false; setLoading(false);
   updateLockoutUI();
 }
+
 // ======================= RENDER SLIP =======================
 function renderSlip(m){
   document.getElementById('login-wrap').style.display='none';
@@ -439,11 +475,16 @@ function renderSlip(m){
   document.getElementById('s-noreg').textContent=m.no_reg||'-';
   document.getElementById('s-unit').textContent =m.unit||'-';
   document.getElementById('s-nama').textContent =m.nama||'-';
+  // Update drawer info
+  document.getElementById('drawer-nama').textContent=m.nama||'-';
+  document.getElementById('drawer-noreg').textContent='No. Reg: '+(m.no_reg||'-')+' · '+( m.unit||'-');
+
   const pelSP=parseN(m.pelunasan_uang), pelPU=parseN(m.pelunasan_bar);
   document.getElementById('label-pelunasan-sp').innerText=rp(pelSP);
   document.getElementById('label-pelunasan-pu').innerText=rp(pelPU);
   document.getElementById('cb-pelunasan-sp').setAttribute('data-nilai',pelSP);
   document.getElementById('cb-pelunasan-pu').setAttribute('data-nilai',pelPU);
+
   const simPokok=parseN(m.sim_pokok), simWajib=parseN(m.sim_wajib), simSukarela=parseN(m.sim_sukarela);
   const simThr=parseN(m.sim_thr), simQurban=parseN(m.sim_qurban), simDansos=parseN(m.sim_dansos), simHarkop=parseN(m.sim_harkop);
   const jlhSim=parseN(m.jlh_simpanan);
@@ -457,8 +498,10 @@ function renderSlip(m){
   const Tpokok=parseN(m.T_pokok), Twajib=parseN(m.T_wajib), Tsukarela=parseN(m.T_sukarela);
   const Tthr=parseN(m.T_thr), Tqurban=parseN(m.T_qurban), Tharkop=parseN(m.T_harkop);
   const totalSim=Tpokok+Twajib+Tsukarela+Tthr+Tqurban+Tharkop;
+
   const dRow=(lbl,val)=>`<div class="d-row"><span class="d-lbl">${lbl}</span><div class="d-right"><span class="d-rp">Rp</span><span class="d-val ${!val?'zero':''}">${val?rp(val):'-'}</span></div></div>`;
   const tsRow=(lbl,val)=>`<div class="ts-row"><span class="ts-lbl">${lbl}</span><div class="ts-right"><span class="ts-rp">Rp</span><span class="ts-val ${!val?'zero':''}">${val?rp(val):'-'}</span></div></div>`;
+
   let html='';
   html+=`<div class="req-section"><div class="req-row"><span class="req-lbl">Permintaan Potongan KKAW</span><span class="req-val">Rp ${rp(jlhPotongan)}</span></div></div>`;
   html+=`<div class="sec-hd"><span class="sec-lbl">A. Jumlah Potongan Tabungan</span><span class="sec-val ${!jlhSim?'zero':''}">Rp ${jlhSim?rp(jlhSim):'-'}</span></div>`;
@@ -478,6 +521,7 @@ function renderSlip(m){
   document.getElementById('slip-body').innerHTML=html;
   document.getElementById('simulasi-panel').classList.remove('show');
 }
+
 // ======================= GET TARIF PREMI =======================
 async function getTarifPremiFromSheet(usia, tahunTenor) {
   const url = `${SCRIPT_URL}?action=getPremi&usia=${usia}&tahun=${tahunTenor}`;
@@ -489,6 +533,7 @@ async function getTarifPremiFromSheet(usia, tahunTenor) {
   }
   throw new Error(data.message || 'Tarif tidak ditemukan');
 }
+
 // ======================= HITUNG SIMULASI =======================
 async function hitungSimulasi() {
   const jenis = document.querySelector('input[name="jenis"]:checked').value;
@@ -502,6 +547,7 @@ async function hitungSimulasi() {
   if(isNaN(pengajuan)||pengajuan<=0){ alert("Masukkan pengajuan pinjaman yang valid"); return; }
   if(isNaN(tenor)||tenor<=0) { alert("Masukkan tenor yang valid"); return; }
   if(isNaN(tahunLahir)||tahunLahir<1900){ alert("Masukkan tahun lahir yang valid (contoh: 1985)"); return; }
+
   const btnHitung = document.getElementById('btn-hitung-simulasi');
   const simLoading = document.getElementById('sim-loading');
   const hasilDiv = document.getElementById('hasil-simulasi');
@@ -509,6 +555,7 @@ async function hitungSimulasi() {
   btnHitung.textContent = 'Menghitung...';
   simLoading.classList.add('show');
   hasilDiv.style.display = 'none';
+
   const kenaPremi = pengajuan > 10000000;
   let usia=0, tahunTenor=0, tarifPremi=0, premiAsuransi=0, pembayaranPremi=0;
   let errPremiMsg = '';
@@ -525,11 +572,13 @@ async function hitungSimulasi() {
     premiAsuransi = pengajuan / 1000;
     pembayaranPremi = premiAsuransi * tarifPremi;
   }
+
   const uangDiterima = pengajuan - pelunasanSP - pelunasanPU - pembayaranPremi;
   const jasaRate = (jenis==='uang') ? 0.5 : 1.0;
   const pokokPerBulan = Math.round(pengajuan / tenor);
   const jasaPerBulan = Math.round(pengajuan * (jasaRate / 100));
   const jumlahPembayaran = pokokPerBulan + jasaPerBulan;
+
   let detailPremi = '';
   if(kenaPremi){
     const warningErr = errPremiMsg
@@ -538,11 +587,11 @@ async function hitungSimulasi() {
     detailPremi = `
       <div class="bg-kuning" style="margin-bottom:12px;">
         ${warningErr}
-        <div class="hasil-row"><span class="hasil-lbl">Usia </span><span class="hasil-val">${usia} tahun</span></div>
-        <div class="hasil-row"><span class="hasil-lbl">Tenor </span><span class="hasil-val">${tahunTenor} tahun</span></div>
-        <div class="hasil-row"><span class="hasil-lbl">Tarif Premi </span><span class="hasil-val">${tarifPremi}</span></div>
-        <div class="hasil-row"><span class="hasil-lbl">Premi Asuransi </span><span class="hasil-val">Rp ${rp(premiAsuransi)}</span></div>
-        <div class="hasil-row"><span class="hasil-lbl">Pembayaran Premi </span><span class="hasil-val">Rp ${rp(pembayaranPremi)}</span></div>
+        <div class="hasil-row"><span class="hasil-lbl">Usia</span><span class="hasil-val">${usia} tahun</span></div>
+        <div class="hasil-row"><span class="hasil-lbl">Tenor</span><span class="hasil-val">${tahunTenor} tahun</span></div>
+        <div class="hasil-row"><span class="hasil-lbl">Tarif Premi</span><span class="hasil-val">${tarifPremi}</span></div>
+        <div class="hasil-row"><span class="hasil-lbl">Premi Asuransi</span><span class="hasil-val">Rp ${rp(premiAsuransi)}</span></div>
+        <div class="hasil-row"><span class="hasil-lbl">Pembayaran Premi</span><span class="hasil-val">Rp ${rp(pembayaranPremi)}</span></div>
       </div>`;
   } else {
     detailPremi = `
@@ -550,25 +599,27 @@ async function hitungSimulasi() {
         <div class="hasil-row"><span class="hasil-lbl">Premi Asuransi:</span><span class="hasil-val">Tidak dikenakan (pinjaman ≤ Rp 10.000.000)</span></div>
       </div>`;
   }
+
   hasilDiv.innerHTML = `
     ${detailPremi}
-    <div class="hasil-row"><span class="hasil-lbl">Pelunasan Pinjaman Uang </span><span class="hasil-val txt-merah">Rp ${rp(pelunasanSP)}</span></div>
-    <div class="hasil-row"><span class="hasil-lbl">Pelunasan Pinjaman Barang </span><span class="hasil-val txt-merah">Rp ${rp(pelunasanPU)}</span></div>
-    ${kenaPremi?`<div class="hasil-row"><span class="hasil-lbl">Pembayaran Premi </span><span class="hasil-val txt-merah">Rp ${rp(pembayaranPremi)}</span></div>`:''}
-    <div class="hasil-row"><span class="hasil-lbl">Uang yang diterima </span><span class="hasil-val txt-hijau besar">Rp ${rp(uangDiterima)}</span></div>
+    <div class="hasil-row"><span class="hasil-lbl">Pelunasan Pinjaman Uang</span><span class="hasil-val txt-merah">Rp ${rp(pelunasanSP)}</span></div>
+    <div class="hasil-row"><span class="hasil-lbl">Pelunasan Pinjaman Barang</span><span class="hasil-val txt-merah">Rp ${rp(pelunasanPU)}</span></div>
+    ${kenaPremi?`<div class="hasil-row"><span class="hasil-lbl">Pembayaran Premi</span><span class="hasil-val txt-merah">Rp ${rp(pembayaranPremi)}</span></div>`:''}
+    <div class="hasil-row"><span class="hasil-lbl">Uang yang diterima</span><span class="hasil-val txt-hijau besar">Rp ${rp(uangDiterima)}</span></div>
     <div style="margin-top:16px;border-top:1px dashed #ccc;padding-top:12px;">
-      <div class="hasil-row"><span class="hasil-lbl">Cicilan Pokok per bulan </span><span class="hasil-val">Rp ${rp(pokokPerBulan)}</span></div>
-      <div class="hasil-row"><span class="hasil-lbl">Cicilan Jasa per bulan (${jasaRate}%) </span><span class="hasil-val">Rp ${rp(jasaPerBulan)}</span></div>
+      <div class="hasil-row"><span class="hasil-lbl">Cicilan Pokok per bulan</span><span class="hasil-val">Rp ${rp(pokokPerBulan)}</span></div>
+      <div class="hasil-row"><span class="hasil-lbl">Cicilan Jasa per bulan (${jasaRate}%)</span><span class="hasil-val">Rp ${rp(jasaPerBulan)}</span></div>
       <div class="highlight-biru">
-        <div class="hasil-row"><span class="hasil-lbl">⭐ Jumlah Pembayaran Pinjaman per bulan </span><span class="hasil-val besar">Rp ${rp(jumlahPembayaran)}</span></div>
+        <div class="hasil-row"><span class="hasil-lbl">⭐ Jumlah Pembayaran Pinjaman per bulan</span><span class="hasil-val besar">Rp ${rp(jumlahPembayaran)}</span></div>
       </div>
     </div>`;
   hasilDiv.style.display = 'block';
   simLoading.classList.remove('show');
   btnHitung.disabled = false;
-  btnHitung.textContent = 'Hitung Simulasi';
+  btnHitung.textContent = 'Hitung Simulasi Top-Up/Tajongan';
   setTimeout(()=>hasilDiv.scrollIntoView({behavior:'smooth',block:'nearest'}), 100);
 }
+
 // ======================= TOGGLE SIMULASI =======================
 function toggleSimulasiPanel(){
   const panel=document.getElementById('simulasi-panel');
@@ -576,11 +627,12 @@ function toggleSimulasiPanel(){
   panel.classList.toggle('show');
   if(isHidden) setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}),100);
 }
+
 // ======================= DOWNLOAD JPG =======================
 async function downloadSlipJPG(){
   const btn=document.getElementById('btn-download');
   const orig=btn.textContent;
-  btn.textContent='📸 Memproses...'; btn.disabled=true;
+  btn.textContent='⏳'; btn.disabled=true;
   const card=document.querySelector('.slip-card');
   const topbar=document.querySelector('.slip-topbar');
   const origDisplay=topbar?topbar.style.display:'';
@@ -597,6 +649,7 @@ async function downloadSlipJPG(){
   if(topbar) topbar.style.display=origDisplay;
   btn.textContent=orig; btn.disabled=false;
 }
+
 // ======================= LOGOUT =======================
 function doLogout(){
   document.getElementById('slip-wrap').style.display='none';
@@ -607,8 +660,10 @@ function doLogout(){
   document.getElementById('simulasi-panel').classList.remove('show');
   document.getElementById('hasil-simulasi').style.display='none';
   currentMember=null;
+  closeDrawer();
   updateLockoutUI();
 }
+
 // ======================= INIT =======================
 document.getElementById('btn-toggle-simulasi').addEventListener('click', toggleSimulasiPanel);
 document.getElementById('btn-hitung-simulasi').addEventListener('click', hitungSimulasi);
